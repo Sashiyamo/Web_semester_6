@@ -5,11 +5,14 @@
     <link rel="stylesheet" href="style.css" type="text/css">
   </head>
   <body>
-    <div class="row">
+    <ul class="row">
       <div class="row_item header">
         <h1>Погода здесь</h1>
         <div>
-          <button class="refresh"><p class="specific">Обновить геолокацию</p></button>
+          <button class="refresh">
+            <p class="specific">Обновить геолокацию</p>
+            <img class="mobile" src="https://www.freeiconspng.com/uploads/refresh-icon-14.png"> 
+          </button>
         </div>
       </div>
       <div class="row_item favorites">
@@ -17,7 +20,7 @@
           <h2>Избранное</h2>
         </div>
         <div class="favorites-right">
-          <input type="text" size="40" placeholder="Добавить новый город" class="select">
+          <input type="text" placeholder="Добавить новый город" class="select">
           <button class="add circle">+</button>
         </div>
       </div>
@@ -54,8 +57,8 @@
           </ul>
         </div>
       </div>
-      <div class="row_item list">
-        <ul class="blocked-left">
+      <ul class="row_item list">
+
           <li>
             <div class="lihead">
               <h3>Moscow</h3>
@@ -146,8 +149,8 @@
               </li>
             </ul>
           </li>
-        </ul>
-        <ul class="blocked-right">
+
+
           <li>
             <div class="lihead">
               <h3>Helsinki</h3>
@@ -238,8 +241,6 @@
               </li>
             </ul>
           </li>
-        </ul>
-      </div>
-    </div>
+    </ul>
   </body>
 </html>
