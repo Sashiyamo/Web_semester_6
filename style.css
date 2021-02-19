@@ -43,7 +43,7 @@ b, span{
   margin-right: auto;
   grid-template-columns: 1fr 1fr;
   grid-row-gap: 20px;
-  width: 1200px;
+  max-width: 1200px;
   grid-template-areas:
     "header header"
     "fixed fixed"
