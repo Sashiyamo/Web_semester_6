@@ -219,7 +219,7 @@ ul.listed li{
     margin-bottom: 9px;
 }
 
-@media only screen and (max-width: 697px) {
+@media only screen and (max-width: 930px) {
     .fixed, .list, .favorites{
         display: block;
     }
@@ -228,11 +228,7 @@ ul.listed li{
         grid-template-columns: 1fr 1fr;
     }
 
-    .header div{
-        justify-content: flex-start;
-    }
-
-    .fixed-left-low{
+    .header div, .fixed-left-low{
         justify-content: flex-start;
     }
 
@@ -251,7 +247,6 @@ ul.listed li{
     }
 
     .select{
-        /*display: block;*/
         width: initial;
         flex: 1;
     }
@@ -264,10 +259,6 @@ ul.listed li{
         display: block;
         height: 35px;
         width: auto;
-    }
-
-    html, body{
-        overflow-x: hidden;
     }
 
 }
