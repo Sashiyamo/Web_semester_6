@@ -225,10 +225,15 @@ ul.listed li{
     }
 
     .header{
-        grid-template-columns: 1fr 1fr;
+        display: flex;
+        justify-content: flex-start;
     }
 
-    .header div, .fixed-left-low{
+    .header div{
+        margin-left: 10px;
+    }
+
+    .fixed-left-low{
         justify-content: flex-start;
     }
 
