@@ -233,6 +233,10 @@ ul.listed li{
         margin-left: 10px;
     }
 
+    .fixed-left h3 {
+        font-size: 35px;
+    }
+
     .fixed-left-low{
         justify-content: flex-start;
     }
