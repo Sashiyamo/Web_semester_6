@@ -11,7 +11,7 @@ function createWeatherList(info) {
         </li>
         <li>
             <span>Давление</span>
-            <span>`+info["main"]["pressure"]+` мм ртутного столба</span>
+            <span>`+info["main"]["pressure"]+` миллибар</span>
         </li>
 		<li>
             <span>Влажность</span>
@@ -19,7 +19,7 @@ function createWeatherList(info) {
         </li>
         <li>
             <span>Видимость</span>
-            <span>`+info["visibility"]+` %</span>
+            <span>`+info["visibility"]+` метров</span>
         </li>
     </ul>
     `
@@ -72,7 +72,7 @@ function refreshUserLoc() {
 
 refreshUserLoc()
 document.querySelectorAll(".refresh")[0].addEventListener("click",function () {
-    document.getElementById("fixed_info").innerHTML = "загрузка"
+    document.getElementById("fixed_info").innerHTML = '<img src="https://acegif.com/wp-content/uploads/loading-11.gif" class="img3">'
     refreshUserLoc()
 })
 
@@ -143,7 +143,7 @@ function addNewCityToListInLoading(info) {
             <div></div>
             <button class="delete circle" city-id="`+info["id"]+`">×</button>
         </div>
-        Загрузка
+        <img src="https://acegif.com/wp-content/uploads/loading-11.gif" class="img3">
     </li>
     `
 }
