@@ -203,6 +203,12 @@ button.circle{
     height: 40px;
 }
 
+.img3{
+    width: auto;
+    height: 200px;
+    justify-content: center;
+}
+
 
 /*lists*/
 ul{
