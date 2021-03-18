@@ -114,7 +114,7 @@ li span:nth-child(2){
 }
 
 .fixed-left p{
-    font-size: 140px;
+    font-size: min(8vw, 100px);
     font-weight: bold;
     margin: 20px 0;
 }
@@ -218,6 +218,7 @@ ul.listed li{
     padding: 7px;
     margin-bottom: 9px;
 }
+
 
 @media only screen and (max-width: 930px) {
     .fixed, .list, .favorites{
