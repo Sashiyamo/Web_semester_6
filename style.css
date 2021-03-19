@@ -249,7 +249,7 @@ ul.listed li{
     }
 
     .fixed-left p{
-        font-size: 100px;
+        font-size: min(100px, 12vw);
     }
 
     .img1{
