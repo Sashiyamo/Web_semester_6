@@ -19,4 +19,4 @@
 
 ## Лабораторная работа №3
 + Перенести весь основной функционал на сервер.
-+ Ссылка на 3ю лабораторую: https://vk.com/@itmowebdev21-laboratornaya-rabota-2
++ Ссылка на 3ю лабораторую: https://vk.com/@itmowebdev21-laboratornaya-rabota-3
