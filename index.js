@@ -147,9 +147,32 @@ app.post('/favs/set', (req, res) => {
             if(!result) {
                 res.status(404).end()
             } else {
-                result.data = req.body
+                result.data = {...result.data, ...req.body}
                 await result.save()
-                res.status(200)
+                res.status(200).end()
+            }
+        }
+    })
+}) 
+
+app.delete('/favs/delete', (req, res) => {
+    let id = req.cookies.id 
+    let city_id = req.body.cityID
+    console.log(req.cookies)
+    storage.findById(id, async (err, result) => {
+        if(err) {
+            res.status(400).end()
+        } else {
+            if(!result) {
+                res.status(404).end()
+            } else {
+                console.log(result.data)
+                let data = {...result.data}
+                delete data[city_id]
+                result.data = data
+                console.log(result.data)
+                await result.save()
+                res.status(200).end()
             }
         }
     })
