@@ -4,32 +4,16 @@ if (window.location.port !== ""){
 }
 
 function createWeatherList(info) {
-    return `
-    <ul class="listed">
-        <li>
-            <span>Осадки</span>
-            <span>`+info["weather"][0]["main"]+`</span>
-        </li>
-		<li>
-            <span>Облачность</span>
-            <span>`+info["clouds"]["all"]+` %</span>
-        </li>
-        <li>
-            <span>Давление</span>
-            <span>`+info["main"]["pressure"]+` миллибар</span>
-        </li>
-		<li>
-            <span>Влажность</span>
-            <span>`+info["main"]["humidity"]+` %</span>
-        </li>
-        <li>
-            <span>Видимость</span>
-            <span>`+info["visibility"]+` метров</span>
-        </li>
-    </ul>
-    `
+    let t = document.querySelector('#createWeatherList').cloneNode(true)
+    let list = t.content.querySelectorAll('span')
+    list[1].textContent = `${info["weather"][0]["main"]}`
+    list[3].textContent = `${info["clouds"]["all"]}` + ` %`
+    list[5].textContent = `${info["main"]["pressure"]}` + ` миллибар`
+    list[7].textContent = `${info["main"]["humidity"]}` + ` %`
+    list[9].textContent = `${info["visibility"]}` + ` метров`
+    return document.importNode(t.content, true)
 }
-
+    
 function userPosition(fn) {
     let defaultPos = [60, 30]
 
@@ -54,18 +38,15 @@ function refreshUserLoc() {
     userPosition(function (loc) {
         weatherFromLatLon(loc[0], loc[1], function (info, status) {
             if (status) {
-                document.getElementById("fixed_info").innerHTML = `
-                <div class="fixed-left">
-                    <h3>`+info['name']+`</h3>
-                    <div class="fixed-left-low">
-                        <img src="`+getWeatherIcon(info)+`" class="img1">
-                        <p>`+info["main"]["temp"]+`°C</p>
-                    </div>
-                </div>
-                <div class="fixed-right">
-                    `+createWeatherList(info)+`
-                </div>
-                `
+                let currWeather = document.querySelector('#fixed_info')
+                console.log(currWeather)
+                let t = document.querySelector('#refreshUserLoc').cloneNode(true)
+                t.content.querySelector('h3').textContent = `${info['name']}`
+                t.content.querySelector('img').setAttribute('src', `${getWeatherIcon(info)}`)
+                t.content.querySelector('p').textContent = `${info["main"]["temp"]}` + '°C'
+                t.content.querySelector('.fixed-right').append(createWeatherList(info))
+                currWeather.innerHTML = ''
+                currWeather.append(document.importNode(t.content, true))
             }
             else {
                 document.getElementById("fixed_info").innerHTML = 'ID lookup error'
@@ -92,7 +73,7 @@ function weatherFromLatLon(lat, lon, fn) {
 	fetch(url+ "/coordinates?lat=" + lat + "&lon=" + lon)
 		.then(res => res.json())
 		.then(res => fn(res[0], res[1]))
-		.catch(e => fn(null, false))
+		.catch(e => {console.log(e); fn(null, false)})
 }
 
 function getWeatherIcon(info) {
@@ -100,31 +81,21 @@ function getWeatherIcon(info) {
 }
 
 function addNewCityToList(info) {
-    return `
-    <li>
-        <div class="lihead">
-            <h3>` + info["name"] + `</h3>
-            <p>` + info["main"]["temp"] + `°C</p>
-            <img src="` + getWeatherIcon(info) + `" class="img2">
-            <button class="delete circle" city-id="`+info["id"]+`">×</button>
-        </div>
-        ` + createWeatherList(info) + `
-    </li>
-    `
+    let t = document.querySelector('#addNewCityToList').cloneNode(true)
+    t.content.querySelector('h3').textContent = ` ${info["name"]}`
+    t.content.querySelector('p').textContent = `${info["main"]["temp"]}` + '°C'
+    t.content.querySelector('img').setAttribute('src', `${getWeatherIcon(info)}`)
+    t.content.querySelector('button').setAttribute('city-id', `${info["id"]}`)
+    t.content.querySelector('li').append(createWeatherList(info))
+    return document.importNode(t.content, true)
 }
 
 function addNewCityToListInLoading(info) {
-    return `
-    <li data-tmp="`+info["id"]+`">
-        <div class="lihead" >
-            <h3>` + info["name"] + `</h3>
-            <div class="degree"></div>
-            <div></div>
-            <button class="delete circle" city-id="`+info["id"]+`">×</button>
-        </div>
-        <img src="https://acegif.com/wp-content/uploads/loading-11.gif" class="img3">
-    </li>
-    `
+    let t = document.querySelector('#addNewCityToListInLoading').cloneNode(true)
+    t.content.querySelector('li').setAttribute('data-tmp',`${info["id"]}`)
+    t.content.querySelector('h3').textContent = ` ${info["name"]}`
+    t.content.querySelector('button').setAttribute('city-id', `${info["id"]}`)
+    return document.importNode(t.content, true)
 }
 
 function removeCityFromList() {
@@ -132,20 +103,23 @@ function removeCityFromList() {
     for (let i = 0; i < w.length; i++) {
         let wi = w.item(i)
         wi.addEventListener("click", function () {
-            wi.parentElement.parentElement.remove()
-            fetch(`${url}/favs/get`)
-            .then(res => res.json())
-            .then(data => {
-                delete data[wi.getAttribute("city-id")]
-                fetch(`${url}/favs/set`, {
-                    method: 'POST', 
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                })
+            wi.disabled = true
+            
+            fetch(`${url}/favs/delete`, {
+                method: 'DELETE', 
+                body: JSON.stringify({cityID: wi.getAttribute("city-id")}),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
             })
+                .then(res => {
+                    if(res.status === 200) {
+                        wi.parentElement.parentElement.remove()
+                    } else {
+                        console.error('Save error')
+                    }
+                })
         })
     }
 }
@@ -160,12 +134,17 @@ document.getElementById("add_form").onsubmit = function () {
         return false
     }
 
+    if (!window.navigator.onLine) {
+        alert("You haven't connection. Please, reconnect and try again")
+        return false
+    }
+
     let infoT = {
         name: city,
         id: Math.random()
     }
 
-    document.getElementById("list_info").insertAdjacentHTML("afterbegin", addNewCityToListInLoading(infoT))
+    document.getElementById("list_info").prepend(addNewCityToListInLoading(infoT))
 
     weatherFromName(city, function (info, status) {
         fetch(`${url}/favs/get`)
@@ -180,7 +159,7 @@ document.getElementById("add_form").onsubmit = function () {
                         alert("The city already exists "+data[info["id"]])
                     }
                     else {
-                        document.getElementById("list_info").insertAdjacentHTML("afterbegin", addNewCityToList(info))
+                        document.getElementById("list_info").prepend(addNewCityToList(info))
                         removeCityFromList()
                         data[info["id"]] = info["name"]
                         fetch(`${url}/favs/set`, {
@@ -213,7 +192,7 @@ fetch(`${url}/favs/get`)
                 id: key
             }
         
-            document.getElementById("list_info").insertAdjacentHTML("afterbegin", addNewCityToListInLoading(info))
+            document.getElementById("list_info").prepend(addNewCityToListInLoading(info))
         
             weatherFromName(value, function (info, status) {
                 document.querySelectorAll('[city-id="'+key+'"]')[0].parentElement.parentElement.remove()
@@ -222,9 +201,9 @@ fetch(`${url}/favs/get`)
                         alert("An error "+info["message"]+" has occurred")
                     }
                     else {
-                        document.getElementById("list_info").insertAdjacentHTML("afterbegin", addNewCityToList(info))
+                        document.getElementById("list_info").prepend(addNewCityToList(info))
                         removeCityFromList()
-                        data[info.id] = info[name]
+                        data[info.id] = info.name
                     }
                 }
                 else {
@@ -240,4 +219,8 @@ fetch(`${url}/favs/get`)
                 'Content-Type': 'application/json'
             },
         })
+        .catch(e => {
+            
+        })
     })
+
